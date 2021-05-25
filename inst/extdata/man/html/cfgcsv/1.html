@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC
+"-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>
+                pRotopackage: cfgcsv
+</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../R.css" />
+</head>
+<body>
+<table
+    width="100%"
+    summary="page for list {base}">
+<tr>
+<td>
+                cfgcsv file format {cfgcsv}
+</td>
+<td style="text-align: right;">
+                Protopackage Documentation
+</td>
+</tr>
+</table>
+
+<h2>
+                The cfgcsv File Format
+</h2>
+<h3>
+                Description
+</h3>
+<p>
+                Description of the cfgcsv file format.
+</p>
+<h3>
+                Details
+</h3>
+<p>
+                A cfgcsv file is a CSV file [<a href=
+                "https://www.rfc-editor.org/rfc/rfc4180.txt"
+                >1</a>, <a href=
+                "https://en.wikipedia.org/wiki/Comma-separated_values">2</a>]
+                that is interpreted in a specific manner.
+</p>
+<h4>
+                Header
+</h4>
+<p>
+                The file header must have as least as many
+                fields as the record having the greatest
+                number of fields.
+</p>
+<p>
+                A record corresponds to a line or row of a CSV file.
+</p>
+<p>
+                A fields correponds to a column of a CSV file.
+</p>
+<h4>
+                Column 1
+</h4>
+<p>
+                Column 1 is defines which records are to be
+                grouped.  Records having the same value in
+                Column 1 are considered to be grouped together.
+</p>
+<h4>
+                Column 2
+</h4>
+<p>
+                Column 2 is defines names to associate with the
+                values interpreted from the cfgcsv file.
+</p>
+<p>
+                There should be no duplication among matched
+                pairs of Column 1 and Column 2 values. There is
+                one exception: <code>"define"</code> may appear
+                multiple times in Column 2 for the same Column-1
+                value.
+</p>
+<h4>
+                "define"
+</h4>
+<p>
+                For a given group and record, when Column 2
+                contains <code>"define"</code>, the value in
+                Column 3 of the same record is associated with
+                the value in Column 4 of the same record; Column
+                3 and 4 of the record form a <a href=
+                "https://en.wikipedia.org/wiki/Attribute%E2%80%93value_pair"
+                >name-value pair</a>.
+                Elsewhere within the group, wherever the defined
+                name occurs, it is replaced with the associated
+                value.
+</p>
+<h4>
+                Interpretation
+</h4>
+<p>
+                Interpretation proceeds as if the following phases were carried out.
+</p>
+<h5>
+                Phase 1: Grouping
+</h5>
+<p>
+                The records are separated according to group,
+                as specified by Column 1.
+</p>
+<h5>
+                Phase 2: Resolution of Definitions
+</h5>
+<p>
+                Within each group, any definitions are used to
+                substitute for the names given in the
+                non-<code>"define"</code> records.
+</p>
+<h5>
+                Phase 3: Concatenation
+</h5>
+<p>
+                Within each record, the values in Columns 3
+                onward are concatenated.
+</p>
+<h3>
+                Example
+</h3>
+<p>
+                The CSV file
+</p>
+<pre>
+"GROUP","NAME","A","B","C"
+"ONE","define","part1","(text to replace part1)"
+"ONE","foo","partA","/partB","/partC"
+"ONE","bar","part1","/part2"
+"TWO","define","part1","(text to replace part1 for group TWO)"
+"TWO","foo","part1","/part2"
+</pre>
+<p>
+                Is interpreted as two groups, named
+                <code>"ONE"</code> and
+                <code>"TWO"</code>.
+</p>
+<p>
+                Group <code>"ONE"</code> has two values, named
+                <code>"foo"</code> and <code>"bar"</code>.
+</p>
+<p>
+                In Group <code>"ONE"</code>, the name
+                <code>"foo"</code> is associated with the text
+                <code>"partA/partB/partC"</code>. And the name
+                <code>"bar"</code> is associated with the text
+                <code>"(text to replace part1)/part2"</code>.
+</p>
+<p>
+                Group <code>"TWO"</code> has one value, named
+                <code>"foo"</code>. For group
+                <code>"TWO"</code>, the name <code>"foo"</code>
+                is associated with the text <code>"(text to
+                replace part1 for group TWO)/part2"</code>.
+</p>
+<hr/>
+<div style="text-align: center;">
+                [Protopackage <em>cfgcsv</em> version X.X.X]
+</div>
+</body>
+</html>
